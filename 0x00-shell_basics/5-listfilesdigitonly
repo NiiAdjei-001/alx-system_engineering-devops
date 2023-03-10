@@ -1,2 +1,2 @@
 #!/bin/bash
-ls -l -a | sort -k3 | sort -k4
+ls -l -a | head
