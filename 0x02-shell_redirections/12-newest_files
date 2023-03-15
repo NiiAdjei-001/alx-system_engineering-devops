@@ -1,2 +1,2 @@
 #!/bin/bash
-find . -type f | sort -k6 -r
+ls -1 -t
