@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Displays "Best School" x10
+ite=0
+while [ $ite -lt 10 ]
+do 
+	echo "Best School"
+	((ite++))
+done
