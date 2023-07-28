@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-# Displays Numbers from 1 - 10. Notifies if number is unlucky
+# Displays numbers from 1 - 100.
+# if number is a multiple of 3 and 5 display FizzBuzz
+# if number is a multiple of 3 display Fizz
+# if number is a multiple of 5 display Buzz
+#
 ite=1
 while [ $ite -lt 101 ]
 do 
