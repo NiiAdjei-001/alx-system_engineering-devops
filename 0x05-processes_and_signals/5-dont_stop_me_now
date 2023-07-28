@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Kill a previously running bash program
+declare -a process_array
+process_array=($(pgrep -x bash))
+size=${#process_array[@]}
+kill "${process_array[size-2]}"
