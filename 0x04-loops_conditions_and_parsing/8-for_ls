@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-# Displays content in a list
-for file in *-*
-do
-	echo "$file" | awk -F- '{print $2}'
-done

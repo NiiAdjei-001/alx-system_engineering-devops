@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-# Displays "Best School" x10
-for _ in {1..10}
-do 
-	echo "Best School"
-done
