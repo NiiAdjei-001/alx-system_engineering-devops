@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-# Displays PID
-pid=$( ps -H aux )
-echo "$pid"

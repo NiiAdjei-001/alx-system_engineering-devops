@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-# Displays bash process
-# shellcheck disable=SC2009
-# pid=$( ps axo user,pid,%cpu,%mem,vsz,rss,tty,stat,start_time,time,comm | grep 'bash' )
-process_list=$( pgrep -l bash)
-echo "$process_list"
