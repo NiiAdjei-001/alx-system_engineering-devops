@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Displays numbers from 1 - 100.
+# if number is a multiple of 3 and 5 display FizzBuzz
+# if number is a multiple of 3 display Fizz
+# if number is a multiple of 5 display Buzz
+#
+ite=1
+while [ $ite -lt 101 ]
+do 
+	if [[ $((ite%3)) == 0 && $((ite%5)) == 0 ]]
+	then
+		echo "FizzBuzz"
+	elif [[ $((ite%3)) == 0 ]]
+	then
+		echo "Fizz"
+	elif [[ $((ite%5)) == 0 ]]
+	then
+		echo "Buzz"
+	else
+		echo "${ite}"
+	fi
+	((ite++))
+done

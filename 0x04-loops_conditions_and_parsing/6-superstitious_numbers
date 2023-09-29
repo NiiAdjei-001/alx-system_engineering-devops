@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Displays Numbers from 1 - 20. Notifies if number is unlucky
+ite=1
+while [ $ite -lt 21 ]
+do 
+	echo $ite
+	case $ite in
+		4)
+			echo "bad luck from China"
+			;;
+		9)
+			echo "bad luck from Japan"
+			;;
+		17)
+			echo "bad luck from Italy"
+			;;
+		*)
+	esac
+	((ite++))
+done
