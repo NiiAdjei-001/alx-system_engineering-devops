@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Displays PID
+# pid=$( ps aux | grep $$ | grep -v 'grep' | awk '{print $2}' )
+# echo "$pid"
+echo "$$"
+
