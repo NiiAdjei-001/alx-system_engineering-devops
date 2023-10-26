@@ -3,8 +3,9 @@
 old_localhost='127.0.0.1'
 new_localhost='127.0.0.2'
 hosts_file='/etc/hosts'
-copy_file='~/hosts.new'
+copy_file='./hosts.new'
 cp $hosts_file $copy_file
 sed -i "s/$old_localhost/$new_localhost/" $hosts_file
 sed -i '$a 8.8.8.8	facebook.com' $hosts_file
 cp -f $copy_file $hosts_file
+rm $copy_file
