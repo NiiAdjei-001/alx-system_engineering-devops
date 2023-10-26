@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Display only listening servers
+netstat -l
