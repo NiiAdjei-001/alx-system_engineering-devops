@@ -2,7 +2,7 @@
 # Change localhost
 old_localhost='127.0.0.1'
 new_localhost='127.0.0.2'
-hosts_file='./hosts'
+hosts_file='/etc/hosts'
 copy_file='./hosts.new'
 cp $hosts_file $copy_file
 sed -i "s/$old_localhost/$new_localhost/" $copy_file
