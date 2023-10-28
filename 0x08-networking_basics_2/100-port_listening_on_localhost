@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # open localhost port 98 for listening.
 port=98
-nc -l $port
+telnet localhost $port
