@@ -1,0 +1,51 @@
+To understand the diagram we will have to take a look at the definitions of a couple of the components.
+--------------------------------------------------------------------------------------------------------
+Client:
+The client is any device capable of browsing or accessing a network. It is basically a device that users use to access a website. Eg. Smart phone, tablet device, laptops, workstations, desktops etc.
+
+Server:
+The Server or server system consist of an organized system of hardware and software working together to produce some service or response to a client. It serves the client with information it has requested for.
+
+Domain name:
+Every device on a network or on the internet is accessible by their IP address. However the IP address is a string of numbers that are not easily remembered. The domain name is a user friendly name mapped to the IP address of a device which a user can use to access that device. Eg foobar.com is a domain name that maps to IP address 8.8.8.8
+Note - www is the canonical name. It maps one domain name to the. The www record is a mapping that exposes the domain as a website on the world wide web domain.
+
+DNS Server:
+The DNS server is a server that stores the mapping of domain names to IP address. A client sends a request with the domain name to the DNS server and the DNS server checks its records and sends an IP address as a response back to the client.
+
+Web Server:
+The web server is a component of a server system that is responsible for the storage, processing and delivering of webpages to client device. It receives http requests, validates and communicates it to the application server which after processing passes the processed data back to the web server which prepares the requisite html, css, javascript and other web files to be sent back to the client device. Eg of web server Nginx
+
+Application server:
+The application server is the layer of the server system responsible for interpreting the payload received by the web server, applying business logic and sending an output back to the web server to be rendered for viewing on the client device.
+
+Database:
+The database is a part of what is called the persistency layer which is responsible for ensuring that organized collection of data is stored appropriately and persist whenever it is required of. Eg of databases include MySQL, MongoDB, PostgresSQL
+
+HTTP Protocol:
+This is the standardized communication rules/protocols on which the client communicates with the web server.
+
+
+So then how does a user go about accessing the website, foobar.com, on this web architecture?
+-----------------------------------------------------------------------------------------------
+A user wanting to access your website firstly will enter the website "foobar.com" into their client device which will search its cache memory for the domain name and corresponding IP address. If present then it sends a direct http request over the HTTP Protocol to the web server with the corresponding IP address.
+
+If the domain record is not in cache, a request is sent over to the DNS server to get IP address of the domain name foobar.com and that data is cached on the clients device for direct addressing when revisiting the website again.
+
+The request for the website is then sent directly to the web server which will then receive and validate the http request and pass on the handling of the payload to the application server.
+The application server then takes the payload, interprets it and runs the required business logic to get the appropriate response. This may require a call to the database to store or retrieve data for processing request. The application server is tasked with duties that include but are not limited to security, transaction processing, resource pooling and messaging.
+
+An html response is formulated and sent back to the web server which prepares the requisite web files and data to be sent over to the client where the client device receives the http response and renders it on the browser for viewing.
+
+
+Some things to take note of:
+-----------------------------
+SPOF - Single Point Of Failure
+The single point of failure is a part of an architecture that when somethings goes wrong with affects the entire operation of the system. For this architecture, the SPOF is the server system itself. There is direct communication between clients and server system. 
+Usually hosting web servers comes with resource limits eg. server capacity space, bandwidth, traffic capacity etc. These limits make it such that system reliability is a challenge. In the event that large volumes of request comes in, the entire server will be overloaded which might affect the overall performance. The server might not be able to keep up with the requests and end up creating long latency periods which would leave an unfavorable review for you web service by clients. You will do well to look into technologies developed to combat these challenges.
+
+Server Downtime:
+Server downtime is a period where access to a web server is down for a couple of reasons like hosting problems, configuration issues, debugging, deployment of updates to the web server or application server, power cut at server location etc. During this period any request to the web server will fail. Because there is a single server system, any event that causes a down time will shut down access to the website. A redundancy system can be put in place to fix this problem.
+
+Scalability and traffic:
+Scalability refers to the ability of a web server to take on an increasing amount of workload. Traffic refers to the volume http requests and response issued within a period. This is an important factor to look into when building web server systems for the purpose of reducing server downtime and long latency periods. The web server must be capable of growing to much its growing needs.
