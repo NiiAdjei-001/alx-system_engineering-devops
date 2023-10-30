@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 # open localhost port 98 for listening.
+host=localhost
 port=98
-nc -l $port
+nc -l $host $port
