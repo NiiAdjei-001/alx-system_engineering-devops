@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #Transfer file from Client to Server
 argc=$# # $#- returns the size of the input array
-if [[ $argc -ge 4 ]]
+if [[ $argc == 4 ]]
 then
     PATH_TO_FILE=$1
     IP=$2
