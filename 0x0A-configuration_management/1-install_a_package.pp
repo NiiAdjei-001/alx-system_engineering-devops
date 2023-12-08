@@ -6,8 +6,8 @@ exec { 'apt update':
 }
 
 package { $python_packages:
-    ensure   => 'installed'
-    provider => 'apt'
+    ensure   => 'installed',
+    provider => 'apt',
     require  => Exec['apt update']
 }
 
