@@ -14,10 +14,10 @@ echo "server {
         index index.html;
 
         location / {
-                index.html
+                index.html;
         }
 
         location /redirect_me {
-                return 301 Moved Permanently
+                return 301 Moved Permanently;
         }
 }" > /etc/nginx/sites-available/default
