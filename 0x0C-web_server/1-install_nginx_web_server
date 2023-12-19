@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #Install NGINX Web Server
 sudo apt-get update
-sudo apt-get -y install nginx
+sudo apt-get -y install nginx ufw
 sudo ufw allow 'Nginx Full'
 sudo ufw allow ssh
 sudo echo 'server {
