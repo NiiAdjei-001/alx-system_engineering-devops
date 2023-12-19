@@ -1,4 +1,4 @@
-HOST 18.204.8.229
-    HostName 18.204.8.229
+HOST 100.26.235.117
+    HostName 100.26.235.117
     User ubuntu
     IdentityFile ~/.ssh/school
