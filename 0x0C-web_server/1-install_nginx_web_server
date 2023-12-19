@@ -2,6 +2,18 @@
 #Install NGINX Web Server
 sudo apt-get update
 sudo apt-get -y install nginx
-sudo ufw allow 'Nginx HTTP'
-sudo ufw allow 'OpenSSH'
-sudo echo 'Hello World!' > /var/www/html/index.nginx-debian.html
+sudo ufw allow 'Nginx Full'
+sudo ufw allow ssh
+sudo echo 'server {
+        listen 80;
+        server_name _;
+
+        root /var/www/html;
+        index index.html;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+}' > /etc/nginx/sites-available/default
+
+sudo echo 'Hello World!' > /var/www/html/index.html
