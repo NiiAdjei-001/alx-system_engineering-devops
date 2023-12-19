@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 #Install NGINX Web Server and prepare redirect
-sudo apt-get update
-sudo apt-get -y install nginx ufw
-sudo ufw allow 'Nginx Full'
-sudo ufw allow 'OpenSSH'
-sudo echo 'server {
+sudo su
+apt-get update
+apt-get -y install nginx ufw
+ufw allow 'Nginx Full'
+ufw allow 'OpenSSH'
+install -m 755 /var/www/html/index.html 
+echo "server {
         listen 80;
         server_name _;
 
@@ -12,10 +14,10 @@ sudo echo 'server {
         index index.html;
 
         location / {
-                try_files $uri $uri/ =404;
+                index.html
         }
 
         location /redirect_me {
                 return 301 Moved Permanently
         }
-}' > /etc/nginx/sites-available/default
+}" > /etc/nginx/sites-available/default
