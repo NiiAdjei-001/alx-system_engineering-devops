@@ -18,4 +18,4 @@ sudo echo "server {
         }
 }" > /etc/nginx/sites-available/default
 #Create index.html page
-sudo echo 'Hello World!' > /var/www/html/index.html
+sudo echo "Hello World!" > /var/www/html/index.html
