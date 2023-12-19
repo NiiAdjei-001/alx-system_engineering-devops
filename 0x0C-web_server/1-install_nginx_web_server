@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 #Install NGINX Web Server
-sudu su
-apt-get update
-apt-get -y install nginx ufw
+sudo apt-get update
+sudo apt-get -y install nginx ufw
 #Setup ufw configuration
-ufw allow 'Nginx Full'
-ufw allow ssh
+sudo ufw allow 'Nginx Full'
+sudo ufw allow ssh
 #Setup basic server configuration
-echo "server {
+sudo echo "server {
         listen 80;
         server_name _;
 
@@ -19,4 +18,4 @@ echo "server {
         }
 }" > /etc/nginx/sites-available/default
 #Create index.html page
-echo 'Hello World!' > /var/www/html/index.html
+sudo echo 'Hello World!' > /var/www/html/index.html
