@@ -6,16 +6,16 @@ sudo apt-get -y install nginx ufw
 sudo ufw allow 'Nginx Full'
 sudo ufw allow ssh
 #Setup basic server configuration
-sudo echo "server {
-        listen 80;
-        server_name _;
-
-        root /var/www/html;
-        index index.html;
-
-        location / {
-                index.html;
-        }
-}" > /etc/nginx/sites-available/default
-#Create index.html page
-sudo echo "Hello World!" > /var/www/html/index.html
+#sudo echo "server {
+#        listen 80;
+#        server_name _;
+#
+#        root /var/www/html;
+#        index index.html;
+#
+#        location / {
+#                index.html;
+#        }
+#}" > /etc/nginx/sites-available/default
+#Create update local page
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
