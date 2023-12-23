@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Configure custom 404 page
+config_file='/etc/nginx/sites-available/default'
+404file='/var/www/html/404.html'
+echo "Ceci n'est pas une page" > $404file
+sed -i '/location /c\
+	error_page 404 /404.html;\
+	location = /404.html {\
+		root 404.html;\
+		internal;\
+	}\
+\
+	location / {
+' $config_file
