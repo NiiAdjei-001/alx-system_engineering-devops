@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
-# Configure custom 404 page
+# Configure custom 404 page on new web server
+sudo apt-get update -y
+sudo apt-get install nginx -y
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
+sudo ufw allow ssh
+sudo ufw allow 'Nginx Full'
+sudo ufw enable
 config_file='/etc/nginx/sites-available/default'
-404file='/var/www/html/404.html'
-echo "Ceci n'est pas une page" > $404file
+_404file='/var/www/html/404.html'
+echo "Ceci n'est pas une page" > $_404file
 sed -i '/location /c\
 	error_page 404 /404.html;\
 	location = /404.html {\

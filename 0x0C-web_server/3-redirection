@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
-# Configure redirect page
+# Configure redirect page on new web server
+sudo apt-get update -y
+sudo apt-get install nginx -y
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
+sudo ufw allow ssh
+sudo ufw allow 'Nginx Full'
+sudo ufw enable
 config_file='/etc/nginx/sites-available/default'
 redirect_file='/var/www/html/redirect_me.html'
 echo "Moved Permanently" > $redirect_file
