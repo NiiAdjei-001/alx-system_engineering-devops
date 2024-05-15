@@ -5,4 +5,6 @@ sudo apt-get install nginx ufw -y
 sudo ufw allow ssh
 sudo ufw allow 'Nginx Full'
 sudo ufw enable
+sudo su
 echo "Hello World!" > /var/www/html/index.nginx-debian.html
+exit
