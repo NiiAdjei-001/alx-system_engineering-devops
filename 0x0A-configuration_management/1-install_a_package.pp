@@ -10,5 +10,5 @@ package { 'python3-pip'
 
 exec { 'install_flask':
     command => 'pip3 install flask==2.1.0',
-    require => ['python-pip3']
+    require => ['python3-pip']
 }
