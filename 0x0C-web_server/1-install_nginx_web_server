@@ -5,6 +5,29 @@ sudo apt-get install nginx ufw -y
 sudo ufw allow ssh
 sudo ufw allow 'Nginx Full'
 sudo ufw enable
-sudo su
-echo "Hello World!" > /var/www/html/index.nginx-debian.html
-exit
+#Create Server Block directory
+sudo mkdir -p /var/www/hello-world.com/html
+sudo chown -R $USER:$USER /var/www/hello-word.com/html
+#Create entry page for Server Block
+sudo echo "Hello World!" > /var/www/hello-world.com/html/index.html
+#Create Server Block config file
+sudo echo "server { 
+    listen 80 default_server;
+    listen [::] default_server;
+
+    root /var/www/hello-world.com/html/;
+    index index.html;
+
+    server_name hello-world.com www.hello-world.com;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+
+}" > ./default
+sudo rm /etc/nginx/sites-available/default
+sudo mv ./default /etc/nginx/sites-available/
+#Enable new server block 
+sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+#Restart nginx
+sudo systemctl restart nginx
