@@ -7,11 +7,11 @@ sudo ufw allow 'Nginx Full'
 sudo ufw enable
 #Create Server Block directory
 sudo mkdir -p /var/www/hello-world.com/html
-sudo chown -R $USER:$USER /var/www/hello-word.com/html
+sudo chown -R "$USER":"$USER" /var/www/hello-word.com/html
 #Create entry page for Server Block
-sudo echo "Hello World!" > /var/www/hello-world.com/html/index.html
+echo "Hello World!" | sudo tee /var/www/hello-world.com/html/index.html
 #Create Server Block config file
-sudo echo "server { 
+echo "server { 
     listen 80 default_server;
     listen [::] default_server;
 
@@ -24,7 +24,7 @@ sudo echo "server {
         try_files \$uri \$uri/ =404;
     }
 
-}" > ./default
+}" | sudo tee ./default
 sudo rm /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 sudo mv ./default /etc/nginx/sites-available/
 #Enable new server block 
