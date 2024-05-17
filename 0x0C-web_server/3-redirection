@@ -1,18 +1,40 @@
 #!/usr/bin/env bash
 # Configure redirect page on new web server
+# Install NGINX Web Server
 sudo apt-get update -y
-sudo apt-get install nginx -y
-echo "Hello World!" > /var/www/html/index.nginx-debian.html
+sudo apt-get install nginx ufw -y
 sudo ufw allow ssh
 sudo ufw allow 'Nginx Full'
 sudo ufw enable
-config_file='/etc/nginx/sites-available/default'
-redirect_file='/var/www/html/redirect_me.html'
-echo "Moved Permanently" > $redirect_file
-sed -i '/location /c\
-	location /redirect_me/ {\
-		return 301 redirect_me.html;\
-	}\
-\
-	location / {
-' $config_file
+# Create Server Block directory
+sudo mkdir -p /var/www/hello-world.com/html
+sudo chown -R $USER:$USER /var/www/hello-word.com/html
+# Create entry page for Server Block
+sudo echo "Hello World!" > /var/www/hello-world.com/html/index.html
+# Create redirect page
+sudo echo "Moved Permanently" > /var/www/hello-world.com/html/redirect_me.html
+# Create Server Block config file
+sudo echo "server { 
+    listen 80 default_server;
+    listen [::] default_server;
+
+    root /var/www/hello-world.com/html/;
+    index index.html;
+
+    server_name hello-world.com www.hello-world.com;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+
+	location /redirect_me/ {
+		return 301 redirect_me.html;
+	}
+
+}" > ./default
+sudo rm /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+sudo mv ./default /etc/nginx/sites-available/
+#Enable new server block 
+sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+#Restart nginx
+sudo nginx -s reload
