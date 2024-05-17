@@ -30,4 +30,4 @@ sudo mv ./default /etc/nginx/sites-available/
 #Enable new server block 
 sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 #Restart nginx
-sudo systemctl restart nginx
+sudo nginx -s reload
