@@ -1,29 +1,32 @@
+#
+Exec { path => '/usr/local/bin/:/bin/'}
+File {
+  ensure => present,
+  group  => 'www-data',
+  mode   => '0775'
+}
+
+# Update libraries
+exec { 'update_lib_repo':
+  command => 'apt-get update -y && apt-get install nginx -y',
+}
 
 # Install Nginx Web Server
 package { 'nginx':
-  ensure => 'installed',
+  ensure  => 'installed',
+  require => Exec['update_lib_repo']
 }
 
 # Setup uncomplicate firewall(ufw) features
-Exec { path => '/usr/local/bin/:/bin/'}
-
 exec { 'setup_ufw':
-  command  => 'ufw allow ssh';
-  command  => 'ufw allow \'Nginx Full\'';
-  command  => 'ufw enable';
-  require  => Package['nginx'],
-}
-
-# Define common file configurations
-File {
-  ensure => 'present',
-  group  => 'ubuntu',
-  mode   => '0775'
+  command => 'ufw allow ssh && ufw allow "Nginx Full" && ufw --force enable',
+  unless  => 'ufw status | grep -q "Status: active"',
+  require => Package['nginx'],
 }
 
 # Setup Nginx Configuration File
 file { '/etc/nginx/sites-available/default':
-  content => 'server {
+  content => "server {
     listen 80 default_server;
     listen [::] default_server;
 
@@ -32,19 +35,19 @@ file { '/etc/nginx/sites-available/default':
 
     server_name _;
 
-		error_page 404 /404.html;
-		location /404.html {
-			internal;
-		}
-
-    location / {
-        try_files \$uri \$uri/ =404;
+    error_page 404 /404.html;
+    location /404.html {
+      internal;
     }
 
-		location /redirect_me {
-			return 301 /redirect_me.html;
-		}
-	}',
+    location / {
+      try_files \$uri \$uri/ =404;
+    }
+
+    location /redirect_me {
+      return 301 /redirect_me.html;
+    }
+  }",
   backup  => '.original'
 }
 
@@ -55,7 +58,7 @@ file { '/var/www/html/index.html':
 
 # Setup 404 page
 file { '/var/www/html/404.html':
-  content => 'Ceci n\'est pas une page',
+  content => "Ceci n'est pas une page",
 }
 
 # Setup redirect_me page
