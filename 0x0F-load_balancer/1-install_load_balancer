@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Install HAprpoxy as a load balancer for ubuntu Focal (20.04 LTS) version 2.8-stable (LTS)
+
+sudo apt-get install --no-install-recommends software-properties-common
+sudo add-apt-repository ppa:vbernat/haproxy-2.8
+
+sudo apt-get install haproxy=2.8.\*
