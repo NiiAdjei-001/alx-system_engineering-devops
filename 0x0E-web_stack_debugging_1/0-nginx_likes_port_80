@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 # Fix nginx to listen on port 80
 sudo apt-get update
-sudo apt-get install nginx ufw -y
-sudo service ufw start
+sudo apt-get install nginx -y
 sudo service nginx start
-sudo ufw allow ssh
-sudo ufw allow 'Nginx Full'
-sudo ufw enable
