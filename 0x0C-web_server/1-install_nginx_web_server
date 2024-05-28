@@ -1,33 +1,19 @@
 #!/usr/bin/env bash
-#Install NGINX Web Server
-sudo apt-get update -y
-sudo apt-get install nginx ufw -y
-sudo ufw allow ssh
-sudo ufw allow 'Nginx Full'
-sudo ufw enable
-#Create Server Block directory
-sudo mkdir -p /var/www/hello-world.com/html
-sudo chown -R "$USER":"$USER" /var/www/hello-word.com/html
-#Create entry page for Server Block
-echo "Hello World!" | sudo tee /var/www/hello-world.com/html/index.html
-#Create Server Block config file
-echo "server { 
-    listen 80 default_server;
-    listen [::] default_server;
+# Install & Configure Nginx
+#----------------------------------
+# Step 1: Install Nginx WebServer
+#----------------------------------
+sudo apt-get update
+sudo apt-get install nginx -y
 
-    root /var/www/hello-world.com/html/;
-    index index.html;
+#----------------------------------
+# Step 2: Prepare Web Pages
+#----------------------------------
+wp_root="/var/www/html"
+sudo touch "$wp_root"/index.html
+echo "Hello World!" | sudo tee "$wp_root/index.html"
 
-    server_name hello-world.com www.hello-world.com;
-
-    location / {
-        try_files \$uri \$uri/ =404;
-    }
-
-}" | sudo tee ./default
-sudo rm /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-sudo mv ./default /etc/nginx/sites-available/
-#Enable new server block 
-sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
-#Restart nginx
-sudo nginx -s reload
+#----------------------------------
+# Step 3: Restart Nginx WebServer
+#----------------------------------
+sudo service nginx restart

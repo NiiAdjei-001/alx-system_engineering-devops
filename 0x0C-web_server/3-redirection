@@ -1,40 +1,26 @@
 #!/usr/bin/env bash
-# Configure redirect page on new web server
-# Install NGINX Web Server
-sudo apt-get update -y
-sudo apt-get install nginx ufw -y
-sudo ufw allow ssh
-sudo ufw allow 'Nginx Full'
-sudo ufw enable
-# Create Server Block directory
-sudo mkdir -p /var/www/hello-world.com/html
-sudo chown -R "$USER":"$USER" /var/www/hello-word.com/html
-# Create entry page for Server Block
-echo "Hello World!" | sudo tee /var/www/hello-world.com/html/index.html
-# Create redirect page
-echo "Moved Permanently" | sudo tee /var/www/hello-world.com/html/redirect_me.html
-# Create Server Block config file
-echo "server { 
-    listen 80 default_server;
-    listen [::] default_server;
+# Configure Redirection Page
+#----------------------------------
+# Step 1: Prepare Redirect_Me Page
+#----------------------------------
+wp_root="/var/www/html"
+sudo touch "$wp_root"/redirect_me.html
+echo "Moved Permanently" | sudo tee "$wp_root/redirect_me.html"
 
-    root /var/www/hello-world.com/html/;
-    index index.html;
+#----------------------------------
+# Step 2: Configure Nginx WebServer
+#----------------------------------
+nginx_config="/etc/nginx/sites-available/default"
+ln=$(($(grep -n -m 1 "location / {" $nginx_config| cut -d ':' -f 1) + 5)) #Get line number for ammendment insertion
+appendment='\
+        location /redirect_me {\
+            return 301 /redirect_me.html;\
+        }\
+'
+sudo sed -i "$ln a $appendment" $nginx_config
 
-    server_name hello-world.com www.hello-world.com;
+#----------------------------------
+# Step 3: Restart Nginx WebServer
+#----------------------------------
+sudo service nginx restart
 
-    location / {
-        try_files \$uri \$uri/ =404;
-    }
-
-	location /redirect_me/ {
-		return 301 redirect_me.html;
-	}
-
-}" | sudo tee ./default
-sudo rm /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-sudo mv ./default /etc/nginx/sites-available/
-#Enable new server block 
-sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
-#Restart nginx
-sudo nginx -s reload
