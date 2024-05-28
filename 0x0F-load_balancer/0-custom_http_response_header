@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Configure Nginx with Custom header `X-Served-By`
+#----------------------------------
+# Step 1: Install Nginx WebServer
+#----------------------------------
+sudo apt-get update
+sudo apt-get install nginx -y
+#----------------------------------
+# Step 2: Prepare Web Pages
+#----------------------------------
+wp_root="/var/www/html"
+sudo touch "$wp_root"/{index.html,redirect_me.html,404.html}
+echo "Hello World!" | sudo tee "$wp_root/index.html"
+echo "Moved Permanently" | sudo tee "$wp_root/redirect_me.html"
+echo "Ceci n'est pas une page" | sudo tee "$wp_root/404.html"
+#----------------------------------
+# Step 3: Configure Nginx WebServer
+#----------------------------------
+nginx_config="/etc/nginx/sites-available/default"
+line1=$(($(grep -n -m 1 "index index.html" $nginx_config| cut -d ':' -f 1) + 1)) #Get line number for ammendment insertion
+appendment1='\
+        add_header X-Served-By $hostname;\
+'
+sudo sed -i "$line1 a $appendment1" $nginx_config
+
+line2=$(($(grep -n -m 1 "location / {" $nginx_config| cut -d ':' -f 1) + 5)) #Get line number for ammendment insertion
+appendment2='\
+        location /redirect_me {\
+            return 301 /redirect_me.html;\
+        }\
+\
+        error_page 404 /404.html;\
+'
+sudo sed -i "$line2 a $appendment2" $nginx_config
+#----------------------------------
+# Step 4: Restart Nginx WebServer
+#----------------------------------
+sudo service nginx restart
