@@ -13,7 +13,7 @@ echo "Ceci n'est pas une page" | sudo tee "$wp_root/404.html"
 nginx_config="/etc/nginx/sites-available/default"
 ln=$(($(grep -n -m 1 "location /redirect_me {" $nginx_config| cut -d ':' -f 1) +3)) #Get line number for ammendment insertion
 appendment='\
-    error_page 404 /404.html;\
+    error_page 404 /404.html; \
 '
 sudo sed -i "$ln a $appendment" $nginx_config
 

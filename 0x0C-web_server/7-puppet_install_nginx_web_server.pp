@@ -1,68 +1,85 @@
-#
+#-----------------------------------------------------
+# Install and Configure New Nginx Server on Ubuntu OS
+#-----------------------------------------------------
+
+# Configure Puppet Resources
 Exec { path => '/usr/local/bin/:/bin/'}
 File {
   ensure => present,
   group  => 'www-data',
-  mode   => '0775'
+  mode   => '0644'
 }
 
-# Update libraries
-exec { 'update_lib_repo':
-  command => 'apt-get update -y && apt-get install nginx -y',
-}
-
-# Install Nginx Web Server
+# Install Nginx package
 package { 'nginx':
   ensure  => 'installed',
-  require => Exec['update_lib_repo']
 }
 
-# Setup uncomplicate firewall(ufw) features
-exec { 'setup_ufw':
-  command => 'ufw allow ssh && ufw allow "Nginx Full" && ufw --force enable',
-  unless  => 'ufw status | grep -q "Status: active"',
+# Run Nginx service
+service { 'nginx':
+  ensure  => running,
+  enable  => true,
+  require => Package['nginx']
+}
+
+# Manage Nginx Configuration
+file { '/etc/nginx/nginx.conf':
+  ensure  => 'present',
   require => Package['nginx'],
+  notify  => Service['nginx']
 }
 
-# Setup Nginx Configuration File
+# Manage Default Server Configuration
 file { '/etc/nginx/sites-available/default':
-  content => "server {
-    listen 80 default_server;
-    listen [::] default_server;
+  ensure  => 'present',
+  content => "#Default Server Configuration
+server {
+  listen 80 default_server;
+  listen [::]:80 default_server;
 
-    root /var/www/html/;
-    index index.html;
+  root /var/www/html;
 
-    server_name _;
+  index index.html index.htm index.nginx-debian.html;
 
-    error_page 404 /404.html;
-    location /404.html {
-      internal;
-    }
+  add_header X-Served-By \$hostname;
 
-    location / {
-      try_files \$uri \$uri/ =404;
-    }
+  server_name _;
 
-    location /redirect_me {
-      return 301 /redirect_me.html;
-    }
-  }",
-  backup  => '.original'
+  location / {
+    try_files \$uri \$uri/ =404;
+  }
+
+  location /redirect_me {
+    return 301 /redirect_me.html;
+  }
+
+  error_page 404 /404.html;
+}"
+  require => Package['nginx'],
+  notify  => Service['nginx']
 }
 
-# Setup default page
+#-----------------------------------------------------
+# Prepare Web pages
+#-----------------------------------------------------
+
+file { '/var/www/html/':
+  ensure =>  'directory',
+  mode   =>  '0755'
+}
+
 file { '/var/www/html/index.html':
-  content => 'Hello World!',
+  ensure  => 'present',
+  content => 'Hello World!'
 }
 
-# Setup 404 page
 file { '/var/www/html/404.html':
-  content => "Ceci n'est pas une page",
+  ensure  => 'present',
+  content => "Ceci n'est pas une page"
 }
 
-# Setup redirect_me page
 file { '/var/www/html/redirect_me.html':
+  ensure  => 'present',
   content => '301 Moved Permanently',
 }
 
