@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#--------------------------------------------------------------------
+# Install Firewall and Configure to listen on only ports: 22 443 80
+#--------------
+sudo apt-get update
+sudo apt-get install ufw
+sudo ufw --dry-run allow 22
+sudo ufw --dry-run allow 443
+sudo ufw --dry-run allow 80
+sudo ufw --dry-run allow 8080
+sudo ufw --dry-run route 0:8080/TCP to 0:80/TCP
+sudo service ufw restart
