@@ -1,7 +1,52 @@
 #!/usr/bin/env bash
-# Install HAprpoxy as a load balancer for ubuntu Focal (20.04 LTS) version 2.8-stable (LTS)
+# Install & Configure HAProxy
+#--------------------------------------
+# Step 1: Install HAProxy Load Balancer
+#--------------------------------------
+sudo apt-get update
+sudo apt-get install haproxy -y
 
-sudo apt-get install --no-install-recommends software-properties-common
-sudo add-apt-repository ppa:vbernat/haproxy-2.8
+#--------------------------------------
+# Step 2: Enable HAProxy on Bootup
+#--------------------------------------
+def_file='/etc/default/haproxy' 
+end_line=$((wc -l $def_file))
+appendment='ENABLED=1'
+sudo sed -i "$end_line a $appendment" $def_file
 
-sudo apt-get install haproxy=2.8.\*
+#-----------------------------------------------------
+# Step 3: Configure HAProxy For Layer4 Load Balancing
+#-----------------------------------------------------
+config_file=' /etc/haproxy/haproxy.cfg'
+
+# Configure Default
+
+key[1]='mode      http'
+key[2]='option    httplog'
+val[1]='mode   tcp'
+val[2]='option tcplog'
+
+sudo sed -i "s/${key[1]}/${val[1]}/" $config_file
+sudo sed -i "s/${key[2]}/${val[2]}/" $config_file
+
+# Configure Frontend and Backend
+eol="$(wc -l $config_file | cut -d ' ' -f 1)"
+appendment='\
+\
+# Frontend Configuration\
+frontend fe_name\
+    bind *:80\
+    default_backend be_name\
+\
+# Backend Configuration\
+backend be_name\
+    balance roundrobin\
+    server 312555-web-01 100.26.252.151:80 check\
+    server 312555-web-02 100.25.201.227:80 check\
+'
+sudo sed -i "$eol a $appendment" $config_file
+
+#--------------------------------------
+# Step 4: Restart HAProxy
+#--------------------------------------
+sudo service haproxy restart
