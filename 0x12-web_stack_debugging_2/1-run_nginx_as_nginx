@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+#
+sudo su "$1" -c service nginx retart
