@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# check user
+if (($# == 0)); then
+        whoami
+elif (($# == 1)); then
+        sudo su "$1" -c whoami
+fi
