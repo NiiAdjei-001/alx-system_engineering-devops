@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Fix nginx to listen on port 80
-sudo docker create -it --name nginx-fix -p 80:80 ubuntu:latest
+sudo docker run -dit --name nginx-fix -p 80:80 ubuntu:latest /bin/bash
 sudo docker start nginx-fix
 sudo docker exec nginx-fix apt-get update
-sudo docker exec nginx-fix apt-get install -y nginx curl net-tools
+sudo docker exec nginx-fix apt-get install -y nginx
 sudo docker exec nginx-fix service nginx start
