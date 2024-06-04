@@ -32,7 +32,7 @@ def run():
                             "task": item['title'],
                             "completed": item['completed']}
                         )
-                json.dump(all_dic, jsfile)
+            json.dump(all_dic, jsfile)
     except Exception as e:
         print(str(e))
 
