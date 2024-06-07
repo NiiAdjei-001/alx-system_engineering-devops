@@ -51,7 +51,7 @@ server {
   location = / {
     try_files \$uri \$uri/ =404;
   }
-  
+
 }"
   require => Package['nginx'],
   notify  => Service['nginx'],
@@ -68,14 +68,17 @@ file { '/var/www/html':
 file { '/var/www/html/index.html':
   ensure  => 'present',
   content => 'Hello World!',
+  require => FILE['var/www/html']
 }
 
 file { '/var/www/html/404.html':
   ensure  => 'present',
-  content => "Ceci n'est pas une page"
+  content => "Ceci n'est pas une page",
+  require => FILE['var/www/html']
 }
 
 file { '/var/www/html/redirect_me.html':
   ensure  => 'present',
   content => '301 Moved Permanently',
+  require => FILE['var/www/html'],
 }
