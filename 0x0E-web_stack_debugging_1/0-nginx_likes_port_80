@@ -1,7 +1,26 @@
 #!/usr/bin/env bash
 # Fix nginx to listen on port 80
-sudo docker run -dit --name nginx-fix -p 80:80 ubuntu:latest /bin/bash
-sudo docker start nginx-fix
-sudo docker exec nginx-fix apt-get update
-sudo docker exec nginx-fix apt-get install -y nginx
-sudo docker exec nginx-fix service nginx start
+
+# Install Nginx
+sudo apt-get update
+sudo apt-get install -y nginx
+
+sudo cat <<EOF > /etc/nginx/sites-available/default
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name _;
+
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    add_header X-Served-By \$hostname;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+} 
+EOF
+
+sudo service nginx restart
