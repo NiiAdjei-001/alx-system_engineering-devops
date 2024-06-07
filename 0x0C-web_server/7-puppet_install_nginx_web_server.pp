@@ -2,14 +2,6 @@
 # Install and Configure New Nginx Server on Ubuntu OS
 #-----------------------------------------------------
 
-# Configure Puppet Resources
-Exec { path => '/usr/local/bin/:/bin/'}
-File {
-  ensure => present,
-  group  => 'www-data',
-  mode   => '0644'
-}
-
 # Install Nginx package
 package { 'nginx':
   ensure  => 'installed',
@@ -24,7 +16,7 @@ service { 'nginx':
 
 # Manage Nginx Configuration
 file { '/etc/nginx/nginx.conf':
-  ensure  => 'present',
+  ensure  => 'file',
   require => Package['nginx'],
   notify  => Service['nginx']
 }
@@ -56,21 +48,20 @@ server {
   error_page 404 /404.html;
 }"
   require => Package['nginx'],
-  notify  => Service['nginx']
+  notify  => Service['nginx'],
 }
 
 #-----------------------------------------------------
 # Prepare Web pages
 #-----------------------------------------------------
 
-file { '/var/www/html/':
-  ensure =>  'directory',
-  mode   =>  '0755'
+file { '/var/www/html':
+  ensure  =>  'directory',
 }
 
 file { '/var/www/html/index.html':
   ensure  => 'present',
-  content => 'Hello World!'
+  content => 'Hello World!',
 }
 
 file { '/var/www/html/404.html':
@@ -82,4 +73,3 @@ file { '/var/www/html/redirect_me.html':
   ensure  => 'present',
   content => '301 Moved Permanently',
 }
-
