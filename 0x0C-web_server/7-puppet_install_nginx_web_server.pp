@@ -37,15 +37,21 @@ server {
 
   server_name _;
 
-  location / {
-    try_files \$uri \$uri/ =404;
-  }
-
-  location /redirect_me {
+  location = /redirect_me {
     return 301 /redirect_me.html;
   }
 
   error_page 404 /404.html;
+  location = /404.html {
+    internal;
+    default_type text/html;
+    return 404 'C\'est ne pas ici';
+  }
+
+  location = / {
+    try_files \$uri \$uri/ =404;
+  }
+  
 }"
   require => Package['nginx'],
   notify  => Service['nginx'],
