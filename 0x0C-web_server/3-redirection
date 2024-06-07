@@ -13,7 +13,7 @@ echo "Moved Permanently" | sudo tee "$wp_root/redirect_me.html"
 nginx_config="/etc/nginx/sites-available/default"
 ln=$(($(grep -n -m 1 "location / {" $nginx_config| cut -d ':' -f 1) + 5)) #Get line number for ammendment insertion
 appendment='
-    location /redirect_me {
+    location = /redirect_me {
         return 301 /redirect_me.html;
     }
 '
