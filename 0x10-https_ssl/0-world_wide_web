@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Display information about sub-domains
+domain=$1
+subdomain=$2
+count=$#
+function get_subdomain_info {
+    if (($# == 1)); then
+        for SUB_DOMAIN in www lb-01 web-01 web-02
+        do
+            dig $SUB_DOMAIN.$1 | grep -A1 'ANSWER SECTION:' | grep "$1" | awk -v"SUB_DOMAIN=$SUB_DOMAIN" '{ 
+                print "The subdomain " SUB_DOMAIN " is a " $4 " record and points to " $5
+            }'
+        done
+    elif (($# >=2 )); then
+        dig "$2.$1" | grep -A1 'ANSWER SECTION:' | grep "$1" | awk -v"SUB_DOMAIN=$2" '{ 
+            print "The subdomain " SUB_DOMAIN " is a " $4 " record and points to " $5
+        }'
+    fi
+}
+
+get_subdomain_info $1 $2
+
