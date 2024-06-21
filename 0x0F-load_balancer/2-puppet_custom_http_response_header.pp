@@ -1,31 +1,46 @@
-#-----------------------------------------------------
-# Install and Configure New Nginx Server on Ubuntu OS
-#-----------------------------------------------------
-
-# Install Nginx package
+# Install and Configure Nginx
 package { 'nginx':
-  ensure => 'installed'
+  ensure => installed,
 }
 
-# Run Nginx service
 service { 'nginx':
-  ensure     => running,
-  enable     => true,
-  hasrestart => true,
-  require    => Package['nginx']
-}
-
-# Manage Nginx Configuration
-file { '/etc/nginx/nginx.conf':
-  ensure  => 'file',
+  ensure  => true,
+  enable  => true,
   require => Package['nginx'],
-  notify  => Service['nginx']
 }
 
-# Manage Default Server Configuration
+file { '/var/www/html':
+  ensure  => present,
+  require => Package['nginx'],
+}
+
+file { '/var/www/html/index.html':
+  ensure  => present,
+  content => 'Hello World!',
+  require => Package['nginx'],
+}
+
+file { '/var/www/html/404.html':
+  ensure  => present,
+  content => "Ceci n'est pas une page",
+  require => Package['nginx'],
+}
+
+file { '/var/www/html/redirect_me.html':
+  ensure  => present,
+  content => 'Moved Permanently',
+  require => Package['nginx'],
+}
+
+file { '/etc/nginx/nginx.conf':
+  ensure  => present,
+  require => Package['nginx'],
+  notify  => Service['nginx'],
+}
+
 file { '/etc/nginx/sites-available/default':
-  ensure => 'present',
-  content => @("EOF")
+  ensure  => present,
+  content => "
 #Default Server Configuration
 server {
   listen 80 default_server;
@@ -39,45 +54,21 @@ server {
 
   server_name _;
 
-  location = /redirect_me {
-    return 301 /redirect_me.html;
+  location /redirect_me {
+    return 301 /redirect_me;
   }
 
   error_page 404 /404.html;
+ 
   location = /404.html {
     internal;
-    default_type text/html;
-    return 404 'C\'est ne pas ici';
   }
 
   location = / {
     try_files \$uri \$uri/ =404;
   }
 }
-| EOF
+",
   require => Package['nginx'],
   notify  => Service['nginx'],
-}
-
-#-----------------------------------------------------
-# Prepare Web pages
-#-----------------------------------------------------
-
-file { '/var/www/html':
-  ensure  =>  'directory',
-}
-
-file { '/var/www/html/index.html':
-  ensure  => 'present',
-  content => 'Hello World!',
-}
-
-file { '/var/www/html/404.html':
-  ensure  => 'present',
-  content => "Ceci n'est pas une page"
-}
-
-file { '/var/www/html/redirect_me.html':
-  ensure  => 'present',
-  content => '301 Moved Permanently',
 }
