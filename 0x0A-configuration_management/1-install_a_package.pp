@@ -1,15 +1,26 @@
-# Install Flask v2.1.0 package
 package { 'python3':
-    ensure   => installed
+    ensure => '3.8.10',
 }
 
 package { 'python3-pip':
-    ensure  => installed,
-    require => Package['python3']
+  ensure  => installed,
+  require => Package['python3']
 }
 
-exec { 'install_flask':
-    command => '/usr/bin/pip3 install flask==2.1.0',
-    unless  => '/usr/bin/pip3 show flask | grep -q "Version: 2.1.0"',
-    require => Package['python3-pip']
+package { 'flask':
+  ensure   => '2.1.0',
+  provider => 'pip3',
+  require  => Package['python3-pip'],
+}
+
+exec { 'uninstall_werkzeug':
+  command => 'pip3 uninstall werkzeug',
+  path    => '/usr/local/bin/:/bin/',
+}
+
+package { 'werkzeug':
+  ensure    => '2.1.1',
+  provider  => 'pip3',
+  require   => Package['python3-pip'],
+  subscribe => Exec['uninstall_werkzeug'],
 }
