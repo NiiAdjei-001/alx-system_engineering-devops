@@ -25,7 +25,8 @@ file { '/etc/nginx/nginx.conf':
 # Manage Default Server Configuration
 file { '/etc/nginx/sites-available/default':
   ensure => 'present',
-  content => "#Default Server Configuration
+  content => @("EOF")
+#Default Server Configuration
 server {
   listen 80 default_server;
   listen [::]:80 default_server;
@@ -46,13 +47,14 @@ server {
   location = /404.html {
     internal;
     default_type text/html;
-    return 404 /404.html;
+    return 404 'C\'est ne pas ici';
   }
 
   location = / {
     try_files \$uri \$uri/ =404;
   }
-}"
+}
+| EOF
   require => Package['nginx'],
   notify  => Service['nginx'],
 }
