@@ -15,14 +15,14 @@ def top_ten(subreddit):
         subreddit,
         limit
     )
-    
+
     response = requests.get(url, headers=headers, allow_redirects=False)
-    
+
     if response.status_code == 200:
         try:
             data = response.json().get('data', {})
-            posts = data.get('children',[])
-            
+            posts = data.get('children', [])
+
             if not posts:
                 print(None)
                 return
@@ -32,8 +32,10 @@ def top_ten(subreddit):
 
         except(ValueError, KeyError):
             print(None)
+
     elif response.status_code == 404:
         print('None')
+
     else:
         print('None')
 
