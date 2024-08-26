@@ -15,7 +15,7 @@ def recurse(subreddit, hot_list=[], after=None):
     if after:
         url += '?after={}'.format(after)
 
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, allow_redirects=False)
 
     if response.status_code == 200:
         for res in response.json()['data']['children']:

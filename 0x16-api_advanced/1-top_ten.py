@@ -17,7 +17,7 @@ def top_ten(subreddit):
         time_filter,
         limit
     )
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, allow_redirects=False)
     if response.status_code == 200:
         for res in response.json()['data']['children']:
             print(res['data']['title'])

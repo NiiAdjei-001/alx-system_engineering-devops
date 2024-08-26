@@ -9,9 +9,9 @@ import requests
 def number_of_subscribers(subreddit):
     """ Get number of Subscribers of a subreddit
     """
-    headers = {'User-Agent': 'ALX Client'}
+    headers = {'User-Agent': 'ALX Client', }
     url = 'https://www.reddit.com/r/{}/about.json'.format(subreddit)
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, allow_redirects=False)
     if response.status_code == 200:
         return response.json()['data']['subscribers']
     else:
