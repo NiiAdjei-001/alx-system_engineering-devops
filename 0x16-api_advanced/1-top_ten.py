@@ -19,10 +19,10 @@ def top_ten(subreddit):
     )
     response = requests.get(url, headers=headers, allow_redirects=False)
     if response.status_code == 200:
-        for res in response.json()['data']['children']:
-            print(res['data']['title'])
+        for post in response.json().get('data').get('children'):
+            print(post.get('data').get('title'))
     else:
-        return None
+        print('None')
 
 
 if __name__ == '__main__':
