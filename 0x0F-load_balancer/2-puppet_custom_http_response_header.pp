@@ -52,6 +52,7 @@ file { $webserver_config_file:
 file { '/var/www/html':
 	ensure  => 'directory',
   recurse => true,
+  require => Package[$service_name]
 }
 
 file { '/var/www/html/index.html':
