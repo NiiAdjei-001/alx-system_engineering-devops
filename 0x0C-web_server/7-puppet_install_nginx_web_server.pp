@@ -1,84 +1,71 @@
-#-----------------------------------------------------
-# Install and Configure New Nginx Server on Ubuntu OS
-#-----------------------------------------------------
-
-# Install Nginx package
-package { 'nginx':
-  ensure  => 'installed',
-}
-
-# Run Nginx service
-service { 'nginx':
-  ensure  => running,
-  enable  => true,
-  require => Package['nginx']
-}
-
-# Manage Nginx Configuration
-file { '/etc/nginx/nginx.conf':
-  ensure  => 'file',
-  require => Package['nginx'],
-  notify  => Service['nginx']
-}
-
-# Manage Default Server Configuration
-file { '/etc/nginx/sites-available/default':
-  ensure  => 'present',
-  content => "#Default Server Configuration
+# Install and Configure Nginx Web Server
+$package_name = 'nginx'
+$service_name = 'nginx'
+$webserver_config_file = '/etc/nginx/sites-available/default'
+$config_template = "#Default Server Configuration
 server {
-  listen 80 default_server;
-  listen [::]:80 default_server;
+	listen 80 default_server;
+	listen [::]:80 default_server;
 
-  root /var/www/html;
+	root /var/www/html;
 
-  index index.html index.htm index.nginx-debian.html;
+	index index.html index.htm index.nginx-debian.html;
 
-  add_header X-Served-By \$hostname;
+	add_header X-served-By \$hostname;
 
-  server_name _;
+	server_name _;
 
-  location = /redirect_me {
-    return 301 /redirect_me.html;
-  }
+	location = / {
+		try_files \$uri \$uri/ =200;
+	}
 
-  error_page 404 /404.html;
-  location = /404.html {
-    internal;
-    default_type text/html;
-    return 404 'C\'est ne pas ici';
-  }
+	location = /redirect_me {
+		return 301 /custom_301.html;
+	}
 
-  location = / {
-    try_files \$uri \$uri/ =404;
-  }
+	error_page 404 /custom_404.html; 
+	location /custom_404.html {
+		internal;
+	}
+}
+"
 
-}"
-  require => Package['nginx'],
-  notify  => Service['nginx'],
+package { $package_name:
+	ensure => installed,
 }
 
-#-----------------------------------------------------
-# Prepare Web pages
-#-----------------------------------------------------
+service { $service_name:
+	ensure     => running,
+	enable     => true,
+	hasrestart => true,
+	require    => Package[$package_name],
+}
+
+file { $webserver_config_file:
+	ensure  => present,
+	content => $config_template,
+	require => Package[$package_name],
+	notify  => Service[$service_name],
+}
 
 file { '/var/www/html':
-  ensure  =>  'directory',
+	ensure => 'directory',
 }
 
 file { '/var/www/html/index.html':
-  ensure  => 'present',
-  content => 'Hello World!',
-  require => FILE['var/www/html']
+	ensure  => 'file',
+	content => 'Hello World!',
+	require => File['/var/www/html']
 }
 
-file { '/var/www/html/404.html':
-  ensure  => 'present',
-  content => "Ceci n'est pas une page",
-  require => FILE['var/www/html']
+file { '/var/www/html/custom_301.html':
+	ensure  => 'file',
+	content => '301 Moved Permanently', 
+	require => File['/var/www/html'],
 }
 
-file { '/var/www/html/redirect_me.html':
-  ensure  => 'present',
-  content => '301 Moved Permanently',
-  require => FILE['var/www/html'],
+file { '/var/www/html/custom_404.html':
+	ensure  => 'file',
+	content => "Ceci n'est pas une page",
+	require => File['/var/www/html'],
 }
