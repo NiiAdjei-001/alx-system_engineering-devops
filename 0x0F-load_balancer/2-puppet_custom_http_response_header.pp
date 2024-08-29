@@ -50,7 +50,8 @@ file { $webserver_config_file:
 }
 
 file { '/var/www/html':
-	ensure => 'directory',
+	ensure  => 'directory',
+  recurse => true,
 }
 
 file { '/var/www/html/index.html':
