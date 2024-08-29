@@ -18,7 +18,8 @@ server {
 	location = / {
 		try_files \$uri \$uri/ =200;
 	}
-
+  
+  error_page 301 /custom_301.html;
 	location = /redirect_me {
 		return 301 /custom_301.html;
 	}
